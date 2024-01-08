@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CodingTest_Reviewer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+
 </resources>
