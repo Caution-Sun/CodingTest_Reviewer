@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.yanzhenjie.permission.Action;
@@ -15,10 +16,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+    // 데이터베이스 인스턴스
+    public static TestDatabase mDatabase = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        openDatabase();
 
         AndPermission.with(this)
                 .runtime()
@@ -36,5 +43,32 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .start();
+    }
+
+    // 종료 시 데이터베이스 닫기.
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(mDatabase != null){
+            mDatabase.close();
+            mDatabase = null;
+        }
+    }
+
+    // 데이터베이스를 여는 함수
+    public void openDatabase() {
+        if(mDatabase != null){
+            mDatabase.close();
+            mDatabase = null;
+        }
+
+        mDatabase = TestDatabase.getInstance(this);
+        boolean isOpen = mDatabase.open();
+        if(isOpen){
+            Log.d(TAG, "Test database is open.");
+        }else{
+            Log.d(TAG, "Test database is not open.");
+        }
     }
 }

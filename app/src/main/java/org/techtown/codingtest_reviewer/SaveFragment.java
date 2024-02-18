@@ -2,6 +2,7 @@ package org.techtown.codingtest_reviewer;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 
 public class SaveFragment extends Fragment {
 
@@ -36,6 +38,7 @@ public class SaveFragment extends Fragment {
     String imageAddress;
     String imgName;
     String title;
+    String date;
 
     Bitmap imgBitmap;
 
@@ -50,6 +53,9 @@ public class SaveFragment extends Fragment {
         buttonSave = rootView.findViewById(R.id.buttonSave);
         editTextTitle = rootView.findViewById(R.id.editTextTitle);
         editTextLink = rootView.findViewById(R.id.editTextLink);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        date = simpleDateFormat.format(System.currentTimeMillis());
 
         buttonSetImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,11 +76,8 @@ public class SaveFragment extends Fragment {
                     Toast.makeText(getActivity(), "풀이 링크를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }else{
                     imgName = title + ".png";
-                    saveBitmapToJpeg(imgBitmap);
-                    imageAddress = getActivity().getCacheDir() + "/" + imgName;
-                    /*
-                    데이터베이스에 id / 제목 / 날짜 / 이미지 경로 / 정답 링크 저장하기
-                    */
+
+                    addTest();
                 }
             }
         });
@@ -108,12 +111,12 @@ public class SaveFragment extends Fragment {
 
                 instream.close();
             }catch (Exception e){
-                e.printStackTrace();
+                Toast.makeText(getContext(), "이미지를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    public void saveBitmapToJpeg(Bitmap bitmap) {
+    public boolean saveBitmapToJpeg(Bitmap bitmap) {
         File tempFile = new File(getActivity().getCacheDir(), imgName);
         try {
             tempFile.createNewFile();
@@ -121,8 +124,43 @@ public class SaveFragment extends Fragment {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
 
             out.close();
+
+            imageAddress = getActivity().getCacheDir() + "/" + imgName;
+
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            Toast.makeText(getContext(), "이미지를 저장하는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private void addTest() {
+        TestDatabase database = TestDatabase.getInstance(getContext());
+
+        String sql = "select * from " + TestDatabase.TABLE_TEST + " where TITLE = '" + title + "'";;
+
+        if(database != null){
+            Cursor cursor = database.rawQuery(sql);
+
+            if(cursor.getCount() != 0){
+                Toast.makeText(getActivity(), "같은 제목의 문제가 이미 존재합니다.", Toast.LENGTH_SHORT).show();
+            }else{
+                sql = "insert into " + TestDatabase.TABLE_TEST +
+                        "(DATE, TITLE, IMAGE, LINK) values(" +
+                        "'" + date + "', " +
+                        "'" + title + "', " +
+                        "'" + imageAddress + "', " +
+                        "'" + solveLink + "')";
+
+                boolean imageSaved = saveBitmapToJpeg(imgBitmap);
+
+                if(imageSaved){
+                    database.execSQL(sql);
+                    Toast.makeText(getActivity(), "문제를 저장했습니다.", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(), "문제를 저장하지 못했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }
