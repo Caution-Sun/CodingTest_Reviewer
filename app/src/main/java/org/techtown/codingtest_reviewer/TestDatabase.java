@@ -98,7 +98,7 @@ public class TestDatabase {
 
             String CREATE_SQL = "create table " + TABLE_TEST + "("
                     + " _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
-                    + " DATE DATE, "
+                    + " DATE TEXT, "
                     + " TITLE TEXT, "
                     + " IMAGE TEXT, "
                     + " LINK TEXT "

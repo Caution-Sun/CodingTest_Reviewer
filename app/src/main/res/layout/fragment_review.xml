@@ -8,9 +8,9 @@
 
     <TextView
         android:id="@+id/textDate"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/view_width"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/margin_num1"
         android:hint="날짜 표기"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,20 +18,20 @@
 
     <TextView
         android:id="@+id/textTitle"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/view_width"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/margin_num1"
         android:text="문제 제목"
-        android:textSize="20sp"
+        android:textSize="@dimen/title_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDate" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="500dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="@dimen/view_width"
+        android:layout_height="@dimen/image_height"
+        android:layout_marginTop="@dimen/margin_num1"
         android:src="@drawable/ic_launcher_foreground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -39,10 +39,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textTitle" />
 
     <Button
-        android:id="@+id/buttonShowAnswer"
-        android:layout_width="300dp"
+        android:id="@+id/buttonToAnswer"
+        android:layout_width="@dimen/view_width"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/margin_num2"
         android:text="풀이 확인"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

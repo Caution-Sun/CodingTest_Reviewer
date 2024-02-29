@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ReviewFragment extends Fragment {
 
@@ -33,7 +32,7 @@ public class ReviewFragment extends Fragment {
     Bitmap bitmap;
     String answerLink;
 
-    String dateNow;
+    boolean isList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +42,7 @@ public class ReviewFragment extends Fragment {
         textDate = rootView.findViewById(R.id.textDate);
         textTitle = rootView.findViewById(R.id.textTitle);
         imageView = rootView.findViewById(R.id.imageView);
-        buttonLink = rootView.findViewById(R.id.buttonShowAnswer);
+        buttonLink = rootView.findViewById(R.id.buttonToAnswer);
 
         buttonLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,23 +56,13 @@ public class ReviewFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void setTest(String dateInput){
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateNow = simpleDateFormat.format(System.currentTimeMillis());
-        // date 값을 설정한 날짜 차이 값으로 변경할 예정
-        date = dateNow;
+        date = dateInput;
 
-        setTest();
-    }
-
-    private void setTest(){
         TestDatabase database = TestDatabase.getInstance(getContext());
 
-        // date 값을 설정한 날짜 차이 값으로 변경할 예정
-        String sql = "select * from " + TestDatabase.TABLE_TEST + " where DATE = '" + date + "', ";
+        String sql = "select * from " + TestDatabase.TABLE_TEST + " where DATE = '" + date + "'";
 
         if(database != null){
             Cursor cursor = database.rawQuery(sql);
@@ -83,21 +72,53 @@ public class ReviewFragment extends Fragment {
             }else{
                 cursor.moveToNext();
 
-                // date 값을 설정한 날짜 차이 값으로 변경할 예정
                 textDate.setText(date);
 
-                title = cursor.getString(0);
+                title = cursor.getString(2);
                 textTitle.setText(title);
 
-                imageAddress = cursor.getString(1);
+                imageAddress = cursor.getString(3);
                 try{
                     bitmap = BitmapFactory.decodeFile(imageAddress);
+                    imageView.setImageBitmap(bitmap);
                 }catch (Exception e){
                     Toast.makeText(getContext(), "이미지를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }
-                imageView.setImageBitmap(bitmap);
 
-                answerLink = cursor.getString(2);
+                answerLink = cursor.getString(4);
+            }
+        }
+    }
+
+    public void setTest(int id){
+
+        TestDatabase database = TestDatabase.getInstance(getContext());
+
+        String sql = "select * from " + TestDatabase.TABLE_TEST + " where _id = '" + id + "'";
+
+        if(database != null){
+            Cursor cursor = database.rawQuery(sql);
+
+            if(cursor.getCount() == 0){
+                Toast.makeText(getContext(), "해당 날짜에 저장된 문제가 없습니다.", Toast.LENGTH_SHORT).show();
+            }else{
+                cursor.moveToNext();
+
+                date = cursor.getString(1);
+                textDate.setText(date);
+
+                title = cursor.getString(2);
+                textTitle.setText(title);
+
+                imageAddress = cursor.getString(3);
+                try{
+                    bitmap = BitmapFactory.decodeFile(imageAddress);
+                    imageView.setImageBitmap(bitmap);
+                }catch (Exception e){
+                    Toast.makeText(getContext(), "이미지를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                }
+
+                answerLink = cursor.getString(4);
             }
         }
     }

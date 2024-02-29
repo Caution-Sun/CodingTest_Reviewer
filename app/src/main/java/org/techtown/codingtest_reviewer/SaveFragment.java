@@ -54,9 +54,6 @@ public class SaveFragment extends Fragment {
         editTextTitle = rootView.findViewById(R.id.editTextTitle);
         editTextLink = rootView.findViewById(R.id.editTextLink);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        date = simpleDateFormat.format(System.currentTimeMillis());
-
         buttonSetImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +80,14 @@ public class SaveFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        date = simpleDateFormat.format(System.currentTimeMillis());
     }
 
     public void openGallery(){
