@@ -1,6 +1,7 @@
 package org.techtown.codingtest_reviewer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,9 @@ public class ReviewFragment extends Fragment {
     Bitmap bitmap;
     String answerLink;
 
+    boolean hasTest = false;
     boolean isList;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,79 +51,42 @@ public class ReviewFragment extends Fragment {
         buttonLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(answerLink));
-
-                startActivity(intent);
+                if(answerLink == null || answerLink.equals("")){
+                    Toast.makeText(getContext(), "저장된 문제가 없습니다", Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(answerLink));
+                    startActivity(intent);
+                }
             }
         });
 
         return rootView;
     }
 
-    public void setTest(String dateInput){
 
-        date = dateInput;
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        TestDatabase database = TestDatabase.getInstance(getContext());
-
-        String sql = "select * from " + TestDatabase.TABLE_TEST + " where DATE = '" + date + "'";
-
-        if(database != null){
-            Cursor cursor = database.rawQuery(sql);
-
-            if(cursor.getCount() == 0){
-                Toast.makeText(getContext(), "해당 날짜에 저장된 문제가 없습니다.", Toast.LENGTH_SHORT).show();
-            }else{
-                cursor.moveToNext();
-
-                textDate.setText(date);
-
-                title = cursor.getString(2);
-                textTitle.setText(title);
-
-                imageAddress = cursor.getString(3);
-                try{
-                    bitmap = BitmapFactory.decodeFile(imageAddress);
-                    imageView.setImageBitmap(bitmap);
-                }catch (Exception e){
-                    Toast.makeText(getContext(), "이미지를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
-                }
-
-                answerLink = cursor.getString(4);
-            }
-        }
+        setTest();
     }
 
-    public void setTest(int id){
+    public void setTest(){
 
-        TestDatabase database = TestDatabase.getInstance(getContext());
+        textDate.setText(date);
 
-        String sql = "select * from " + TestDatabase.TABLE_TEST + " where _id = '" + id + "'";
-
-        if(database != null){
-            Cursor cursor = database.rawQuery(sql);
-
-            if(cursor.getCount() == 0){
-                Toast.makeText(getContext(), "해당 날짜에 저장된 문제가 없습니다.", Toast.LENGTH_SHORT).show();
-            }else{
-                cursor.moveToNext();
-
-                date = cursor.getString(1);
-                textDate.setText(date);
-
-                title = cursor.getString(2);
-                textTitle.setText(title);
-
-                imageAddress = cursor.getString(3);
-                try{
-                    bitmap = BitmapFactory.decodeFile(imageAddress);
-                    imageView.setImageBitmap(bitmap);
-                }catch (Exception e){
-                    Toast.makeText(getContext(), "이미지를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
-                }
-
-                answerLink = cursor.getString(4);
+        if(hasTest){
+            textTitle.setText(title);
+            try{
+                bitmap = BitmapFactory.decodeFile(imageAddress);
+                imageView.setImageBitmap(bitmap);
+            }catch (Exception e){
+                Toast.makeText(getContext(), "이미지를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
             }
+        }else{
+            Toast.makeText(getContext(), "해당 날짜에 저장된 문제가 없습니다.", Toast.LENGTH_SHORT).show();
         }
+
     }
+
 }

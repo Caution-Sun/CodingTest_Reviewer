@@ -27,11 +27,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         listPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                listPreference.setSummary(getDateInterval()+"일");
+                listPreference.setSummary(newValue+"일");
                 return true;
             }
         });
-
     }
 
     private String getDateInterval(){

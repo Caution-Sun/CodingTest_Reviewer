@@ -77,7 +77,9 @@ public class ListTActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 cursor.moveToPrevious();
-                setTest();
+
+                setTestData();
+                reviewFragment.setTest();
 
                 if(id == start){
                     buttonBack.setEnabled(false);
@@ -98,7 +100,9 @@ public class ListTActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 cursor.moveToNext();
-                setTest();
+
+                setTestData();
+                reviewFragment.setTest();
 
                 if(id == start){
                     buttonBack.setEnabled(false);
@@ -124,7 +128,7 @@ public class ListTActivity extends AppCompatActivity {
         if(id == end)
             buttonNext.setEnabled(false);
 
-        setTest();
+        setTestData();
     }
 
     @Override
@@ -138,10 +142,18 @@ public class ListTActivity extends AppCompatActivity {
 
     }
 
-    private void setTest(){
-        reviewFragment.isList = true;
+    private void setTestData(){
+        reviewFragment.hasTest = true;
 
-        reviewFragment.setTest(id);
+        String date = cursor.getString(1);
+        String title = cursor.getString(2);
+        String imageAddress = cursor.getString(3);
+        String answerLink = cursor.getString(4);
+
+        reviewFragment.date = date;
+        reviewFragment.title = title;
+        reviewFragment.imageAddress = imageAddress;
+        reviewFragment.answerLink = answerLink;
     }
 
     private void initQuestion() {
@@ -167,7 +179,7 @@ public class ListTActivity extends AppCompatActivity {
             int _id = cursor.getInt(0);
 
             if(_id == id){
-                setTest();
+                setTestData();
                 break;
             }
         }

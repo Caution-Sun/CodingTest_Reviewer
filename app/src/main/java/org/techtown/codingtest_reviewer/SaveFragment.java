@@ -71,6 +71,8 @@ public class SaveFragment extends Fragment {
                     Toast.makeText(getActivity(), "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }else if(solveLink == null || solveLink.equals("")){
                     Toast.makeText(getActivity(), "풀이 링크를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }else if(imgBitmap == null || imgBitmap.equals("")){
+                    Toast.makeText(getActivity(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
                 }else{
                     imgName = title + ".png";
 
@@ -88,6 +90,7 @@ public class SaveFragment extends Fragment {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         date = simpleDateFormat.format(System.currentTimeMillis());
+        textDate.setText(date);
     }
 
     public void openGallery(){
