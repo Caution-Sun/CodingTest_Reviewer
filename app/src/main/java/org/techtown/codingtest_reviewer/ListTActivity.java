@@ -119,6 +119,7 @@ public class ListTActivity extends AppCompatActivity {
         });
     }
 
+    /*
     @Override
     protected void onResume() {
         super.onResume();
@@ -130,6 +131,8 @@ public class ListTActivity extends AppCompatActivity {
 
         setTestData();
     }
+
+     */
 
     @Override
     protected void onDestroy() {
@@ -143,13 +146,14 @@ public class ListTActivity extends AppCompatActivity {
     }
 
     private void setTestData(){
-        reviewFragment.hasTest = true;
 
+        id = cursor.getInt(0);
         String date = cursor.getString(1);
         String title = cursor.getString(2);
         String imageAddress = cursor.getString(3);
         String answerLink = cursor.getString(4);
 
+        reviewFragment.hasTest = true;
         reviewFragment.date = date;
         reviewFragment.title = title;
         reviewFragment.imageAddress = imageAddress;
@@ -167,7 +171,7 @@ public class ListTActivity extends AppCompatActivity {
 
         database = TestDatabase.getInstance(this);
 
-        String sql = "select _id" + TestDatabase.TABLE_TEST + " order by _id ASC";
+        String sql = "select * from " + TestDatabase.TABLE_TEST + " order by _id ASC";
 
         cursor = database.rawQuery(sql);
 

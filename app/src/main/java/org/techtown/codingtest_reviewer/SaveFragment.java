@@ -153,15 +153,14 @@ public class SaveFragment extends Fragment {
             if(cursor.getCount() != 0){
                 Toast.makeText(getActivity(), "같은 제목의 문제가 이미 존재합니다.", Toast.LENGTH_SHORT).show();
             }else{
+                boolean imageSaved = saveBitmapToJpeg(imgBitmap);
+
                 sql = "insert into " + TestDatabase.TABLE_TEST +
                         "(DATE, TITLE, IMAGE, LINK) values(" +
                         "'" + date + "', " +
                         "'" + title + "', " +
                         "'" + imageAddress + "', " +
                         "'" + solveLink + "')";
-
-                boolean imageSaved = saveBitmapToJpeg(imgBitmap);
-
                 if(imageSaved){
                     database.execSQL(sql);
                     Toast.makeText(getActivity(), "문제를 저장했습니다.", Toast.LENGTH_SHORT).show();

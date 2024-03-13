@@ -21,6 +21,7 @@
         android:layout_width="@dimen/view_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_num1"
+        android:hint="문제 제목"
         android:text="문제 제목"
         android:textSize="@dimen/title_size"
         app:layout_constraintEnd_toEndOf="parent"

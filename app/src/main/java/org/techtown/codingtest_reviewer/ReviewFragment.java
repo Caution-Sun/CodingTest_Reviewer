@@ -35,8 +35,6 @@ public class ReviewFragment extends Fragment {
     String answerLink;
 
     boolean hasTest = false;
-    boolean isList;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,25 +66,32 @@ public class ReviewFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        setTest();
+        if(hasTest)
+            setTest();
+        else
+            initView();
     }
 
     public void setTest(){
 
         textDate.setText(date);
 
-        if(hasTest){
-            textTitle.setText(title);
-            try{
-                bitmap = BitmapFactory.decodeFile(imageAddress);
-                imageView.setImageBitmap(bitmap);
-            }catch (Exception e){
-                Toast.makeText(getContext(), "이미지를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            Toast.makeText(getContext(), "해당 날짜에 저장된 문제가 없습니다.", Toast.LENGTH_SHORT).show();
+        textTitle.setText(title);
+        try{
+            bitmap = BitmapFactory.decodeFile(imageAddress);
+            imageView.setImageBitmap(bitmap);
+        }catch (Exception e){
+            Toast.makeText(getContext(), "이미지를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public void initView(){
+        textDate.setText(date);
+
+        textTitle.setText(null);
+        imageView.setImageBitmap(null);
+        answerLink = null;
     }
 
 }

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 .onGranted(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> data) {
-                        Toast.makeText(MainActivity.this, "허용된 권한 개수 : " + data.size(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "허용된 권한 개수 : " + data.size(), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .onDenied(new Action<List<String>>() {
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         dateInterval = sharedPreferences.getString("date_interval", "0");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        date = simpleDateFormat.format(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * Integer.parseInt(dateInterval)));
+        date = simpleDateFormat.format(System.currentTimeMillis() - (1000 * 60 * 60 * 24 * Integer.parseInt(dateInterval)));
 
         setTestData();
 
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
                         dateInterval = sharedPreferences.getString("date_interval", "0");
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        date = simpleDateFormat.format(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * Integer.parseInt(dateInterval)));
+                        date = simpleDateFormat.format(System.currentTimeMillis() - (1000 * 60 * 60 * 24 * Integer.parseInt(dateInterval)));
 
                         setTestData();
 
@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             Cursor cursor = mDatabase.rawQuery(sql);
 
             if(cursor.getCount() == 0){
+                Toast.makeText(this, "해당 날짜에 저장된 문제가 없습니다.", Toast.LENGTH_SHORT).show();
                 reviewFragment.hasTest = false;
             }else{
                 cursor.moveToNext();
