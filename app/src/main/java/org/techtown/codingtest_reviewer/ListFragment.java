@@ -47,7 +47,7 @@ public class ListFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        loadQuestionListData();
+        //loadQuestionListData();
 
         return rootView;
     }
@@ -56,6 +56,7 @@ public class ListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        adapter.clearItems();
         loadQuestionListData();
     }
 

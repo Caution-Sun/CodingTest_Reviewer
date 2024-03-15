@@ -54,6 +54,10 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> im
         items.set(position, item);
     }
 
+    public void clearItems(){
+        items.clear();
+    }
+
     public void setOnItemClickListener(OnTestClickListener listener){
         this.listener = listener;
     }
