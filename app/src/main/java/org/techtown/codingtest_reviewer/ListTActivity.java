@@ -2,7 +2,9 @@ package org.techtown.codingtest_reviewer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -61,7 +63,7 @@ public class ListTActivity extends AppCompatActivity {
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showDeleteMessage();
             }
         });
 
@@ -133,6 +135,39 @@ public class ListTActivity extends AppCompatActivity {
     }
 
      */
+
+    private void showDeleteMessage(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("문제 삭제");
+        builder.setMessage("정말로 삭제하시겠습니까?");
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+
+        builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 삭제 버튼이 눌렸을 때 이벤트
+                deleteQuestion();
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 아니오 버튼이 눌렸을 때 이벤트
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void deleteQuestion(){
+        TestDatabase database = TestDatabase.getInstance(this);
+
+        String sql = "DELETE FROM " + TestDatabase.TABLE_TEST + " WHERE _id = " + id;
+        database.execSQL(sql);
+
+    }
 
     @Override
     protected void onDestroy() {

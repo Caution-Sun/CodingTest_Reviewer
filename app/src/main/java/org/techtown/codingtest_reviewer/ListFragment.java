@@ -52,6 +52,13 @@ public class ListFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        loadQuestionListData();
+    }
+
     // 리사이클러뷰에 문제 추가 메소드
     public void loadQuestionListData() {
 
