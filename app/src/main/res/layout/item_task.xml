@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="1dp"
+    android:layout_marginRight="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/backgroundLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main">
+
+        <ImageView
+            android:id="@+id/imageDelete"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:scaleType="center"
+            android:src="@drawable/task_alt_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageEdit"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:scaleType="center"
+            android:src="@drawable/edit_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/itemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_drawable"
+        android:paddingStart="15dp"
+        android:paddingTop="25dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="25dp">
+
+        <TextView
+            android:id="@+id/textTask"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="3"
+            android:hint="task"
+            android:singleLine="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textTime"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="2"
+            android:hint="time"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</FrameLayout>
