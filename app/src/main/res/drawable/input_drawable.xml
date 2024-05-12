@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:color="@color/main"
+                android:width="2dp"/>
+            <corners android:topLeftRadius="@android:dimen/app_icon_size"
+                android:bottomLeftRadius="@android:dimen/app_icon_size"
+                android:topRightRadius="@android:dimen/app_icon_size"
+                android:bottomRightRadius="@android:dimen/app_icon_size"/>
+        </shape>
+    </item>
+</layer-list>
