@@ -99,8 +99,9 @@ public class TaskDatabase {
 
             String CREATE_SQL = "CREATE TABLE " + TABLE_USERS + "("
                     + " _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
-                    + " NAME TASK DEFAULT '', "
-                    + " DATE TEXT DEFAULT '' "
+                    + " TASK TEXT DEFAULT '', "
+                    + " DATE TEXT DEFAULT '', "
+                    + " ADDRESS TEXT DEFAULT '' "
                     + ")";
             try{
                 db.execSQL(CREATE_SQL);
