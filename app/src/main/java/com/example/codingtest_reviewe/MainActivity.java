@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -79,7 +80,20 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
         adapter.setOnItemClickListener(new onTaskClickListener() {
             @Override
             public void onItemClick(TaskAdapter.ViewHolder holder, View view, int position) {
-                // Address 주소로 인터넷 브라우저 실행
+                Task task = adapter.getItem(position);
+
+                TaskDatabase database = TaskDatabase.getInstance(getApplicationContext());
+                String SQL = "SELECT ADDRESS FROM " + database.TABLE_USERS + " WHERE _id = " + task.getId();
+                if(database != null){
+                    Cursor cursor = database.rawQuery(SQL);
+
+                    cursor.moveToNext();
+                    String address = cursor.getString(0);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(address));
+                    startActivity(intent);
+
+                    cursor.close();
+                }
             }
         });
 
@@ -144,7 +158,14 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
     // implements onItemSwipeListener removeItem
     @Override
     public void removeItem(int position) {
-        // Item 삭제
+        Task task = adapter.getItem(position);
+
+        TaskDatabase database = TaskDatabase.getInstance(this);
+        String SQL = "DELETE FROM " + database.TABLE_USERS + " WHERE _id = " + task.getId();
+        if(database != null){
+            database.execSQL(SQL);
+            loadTaskListData();
+        }
     }
 
     // onDestroy Close Database
