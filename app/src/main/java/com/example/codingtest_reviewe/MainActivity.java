@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
     TaskAdapter adapter;
 
     private ActivityResultLauncher<Intent> makeResultLauncher;
+    private ActivityResultLauncher<Intent> editResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,31 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
                     // Insert Database
                     TaskDatabase database = TaskDatabase.getInstance(getApplicationContext());
                     String SQL = "INSERT INTO " + database.TABLE_USERS + "(TASK, DATE, ADDRESS) VALUES(" + "'" + task + "', '" + date + "', '" + address + "'" + ")";
+                    if(database != null){
+                        database.execSQL(SQL);
+                        loadTaskListData();
+                    }
+                }
+            }
+        });
+        // EditActivity ActivityResultCallback
+        editResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult o) {
+                if(o.getResultCode() == RESULT_OK){
+                    Intent intent = o.getData();
+                    String task = intent.getStringExtra("task");
+                    String date = intent.getStringExtra("date");
+                    String address = intent.getStringExtra("address");
+                    int id = intent.getIntExtra("id", -1);
+
+                    //Edit Database
+                    TaskDatabase database = TaskDatabase.getInstance(getApplicationContext());
+                    String SQL = "UPDATE " + database.TABLE_USERS + " SET " +
+                            "TASK = '" + task + "', " +
+                            "date = '" + date + "', " +
+                            "ADDRESS = '" + address + "' " +
+                            "WHERE _id = " + id;
                     if(database != null){
                         database.execSQL(SQL);
                         loadTaskListData();
@@ -128,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
         adapter.notifyDataSetChanged();
 
         TaskDatabase database = TaskDatabase.getInstance(this);
-        String SQL = "SELECT _id, TASK, DATE FROM " + database.TABLE_USERS + " ORDER BY DATE";
+        String SQL = "SELECT _id, TASK, DATE, ADDRESS FROM " + database.TABLE_USERS + " ORDER BY DATE";
         if(database != null){
             Cursor cursor = database.rawQuery(SQL);
 
@@ -140,8 +166,9 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
                 int id = cursor.getInt(0);
                 String task = cursor.getString(1);
                 String date = cursor.getString(2);
+                String address = cursor.getString(3);
 
-                adapter.addItem(new Task(id, task, date));
+                adapter.addItem(new Task(id, task, date, address));
             }
 
             cursor.close();
@@ -152,7 +179,15 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
     // implements onItemSwipeListener editItem
     @Override
     public void editItem(int position) {
-        // Item 수정
+        Task task = adapter.getItem(position);
+
+        Intent intent = new Intent(getApplicationContext(), EditActivity.class);
+        intent.putExtra("id", task.getId());
+        intent.putExtra("task", task.getTask());
+        intent.putExtra("date", task.getDate());
+        intent.putExtra("address", task.getAddress());
+
+        editResultLauncher.launch(intent);
     }
 
     // implements onItemSwipeListener removeItem

@@ -84,7 +84,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> im
         public void setItem(Task item){
             textTask.setText(item.getTask());
 
-            textTime.setText(item.getTime());
+            textTime.setText(item.getDate());
         }
     }
 }

@@ -6,24 +6,29 @@ import android.os.Parcelable;
 public class Task implements Parcelable {
     int id;
     String task;
-    String time;
+    String date;
 
-    public Task(int id, String task, String time){
+    String address;
+
+    public Task(int id, String task, String date, String address){
         this.id = id;
         this.task = task;
-        this.time = time;
+        this.date = date;
+        this.address = address;
     }
     protected Task(Parcel in) {
         id = in.readInt();
         task = in.readString();
-        time = in.readString();
+        date = in.readString();
+        address = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(task);
-        dest.writeString(time);
+        dest.writeString(date);
+        dest.writeString(address);
     }
 
     @Override
@@ -59,11 +64,15 @@ public class Task implements Parcelable {
         this.task = task;
     }
 
-    public String getTime() {
-        return time;
+    public String getDate() {
+        return date;
     }
 
     public void setTime(String time) {
-        this.time = time;
+        this.date = time;
     }
+
+    public String getAddress() { return address; }
+
+    public void setAddress(String address) { this.address = address; }
 }
