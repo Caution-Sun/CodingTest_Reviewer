@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.codingtest_reviewe.databinding.ActivityMainBinding;
 import com.example.codingtest_reviewe.recyclerView.Task;
 import com.example.codingtest_reviewe.recyclerView.TaskAdapter;
 import com.example.codingtest_reviewe.recyclerView.TaskItemTouchHelperCallback;
@@ -26,10 +27,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MainActivity extends AppCompatActivity implements onItemSwipeListener {
 
     private static final String TAG = "MainActivity";
+    private ActivityMainBinding mainBinding;
     public static TaskDatabase mDatabase = null;
-
-    RecyclerView recyclerView;
-    FloatingActionButton floatingActionButton;
 
     TaskAdapter adapter;
 
@@ -39,12 +38,12 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        // View Binding
+        mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(mainBinding.getRoot());
 
         openDatabase();
-
-        recyclerView = findViewById(R.id.recyclerView);
-        floatingActionButton = findViewById(R.id.floatingActionButton);
 
         // AddActivity ActivityResultCallback
         makeResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
         });
 
         // floatingButton goto AddActivity
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mainBinding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddActivity.class);
@@ -124,11 +123,11 @@ public class MainActivity extends AppCompatActivity implements onItemSwipeListen
         });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        mainBinding.recyclerView.setLayoutManager(layoutManager);
+        mainBinding.recyclerView.setAdapter(adapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TaskItemTouchHelperCallback(this));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        itemTouchHelper.attachToRecyclerView(mainBinding.recyclerView);
 
         loadTaskListData();
     }

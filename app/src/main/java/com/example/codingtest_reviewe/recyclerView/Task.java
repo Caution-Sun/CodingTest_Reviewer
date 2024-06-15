@@ -7,7 +7,6 @@ public class Task implements Parcelable {
     int id;
     String task;
     String date;
-
     String address;
 
     public Task(int id, String task, String date, String address){

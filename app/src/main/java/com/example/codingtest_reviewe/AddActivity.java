@@ -1,107 +1,53 @@
 package com.example.codingtest_reviewe;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.util.Calendar;
+import com.example.codingtest_reviewe.databinding.ActivityAddBinding;
 
 public class AddActivity extends AppCompatActivity {
-    EditText editTextTask;
-    EditText editTextAdd;
-    Button buttonSetTime;
-    Button buttonAdd;
-    TextView textYear;
-    TextView textDate;
 
-    String yearString;
-    String dateString;
-    String addString;
-
-    DatePickerDialog datePickerDialog;
+    private ActivityAddBinding addBinding;
+    private AddViewModel addViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
 
-        // Views
-        editTextTask = findViewById(R.id.editTextTask_add);
-        editTextAdd = findViewById(R.id.editTextAdd_add);
-        buttonSetTime = findViewById(R.id.buttonSetTime_add);
-        buttonAdd = findViewById(R.id.buttonAdd);
-        textYear = findViewById(R.id.textYear_add);
-        textDate = findViewById(R.id.textDate_add);
+        // Data binding
+        addBinding = ActivityAddBinding.inflate(getLayoutInflater());
+        setContentView(addBinding.getRoot());
 
-        // init DatePicker
-        initDatePicker();
+        addViewModel = new ViewModelProvider(this).get(AddViewModel.class);
 
-        // button set Date
-        buttonSetTime.setOnClickListener(new View.OnClickListener() {
+        addBinding.setViewModel(addViewModel);
+        addBinding.setLifecycleOwner(this);
+
+        addViewModel.getToastMessage().observe(this, new Observer<String>() {
             @Override
-            public void onClick(View view) {
-                datePickerDialog.show();
+            public void onChanged(String s) {
+                Toast.makeText(getApplicationContext(),s , Toast.LENGTH_SHORT).show();
             }
         });
 
-        // button transmit data to ListActivity and finish
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
+        addViewModel.getAddTaskEvent().observe(this, new Observer<Event<String>>() {
             @Override
-            public void onClick(View view) {
-                String task = editTextTask.getText().toString();
-                String date = yearString + " " + dateString;
-                addString = editTextAdd.getText().toString();
+            public void onChanged(Event<String> event) {
+                if(event != null && event.getContentIfNotHandled() != null){
 
-                if(task == null || task.equals("")){
-                    Toast.makeText(getApplicationContext(), "할 일을 입력해 주세요.", Toast.LENGTH_SHORT).show();
-                }else if(yearString == null || yearString.equals("")){
-                    Toast.makeText(getApplicationContext(), "날짜를 입력해 주세요.", Toast.LENGTH_SHORT).show();
-                }else if(addString == null || addString.equals("")){
-                    Toast.makeText(getApplicationContext(), "주소를 입력해 주세요.", Toast.LENGTH_SHORT).show();
-                }else{
                     Intent intent = new Intent();
-                    intent.putExtra("task", task);
-                    intent.putExtra("date", date);
-                    intent.putExtra("address", addString);
+                    intent.putExtra("task", addViewModel.getTitle().getValue());
+                    intent.putExtra("date", addViewModel.getYearString().getValue() + " " + addViewModel.getDateString().getValue());
+                    intent.putExtra("address", addViewModel.getAddress().getValue());
                     setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
-    }
-
-    // init DatePicker
-    private void initDatePicker() {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month + 1;
-
-                yearString = Integer.toString(year);
-                dateString = month + "/" + day;
-
-                textYear.setText(yearString);
-                textDate.setText(dateString);
-            }
-        };
-
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int style = AlertDialog.THEME_HOLO_LIGHT;
-
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
 }
